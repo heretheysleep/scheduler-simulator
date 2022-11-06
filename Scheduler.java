@@ -31,7 +31,7 @@ public class Scheduler {
         processQueue[endOfQueue] = process;
         numberOfWaitingProcess++;
 
-        System.out.println("\nAction status: SUCCESSFULL\nProcess is waiting.");
+        System.out.println("\nAction status: SUCCESSFUL\nProcess is waiting.");
         process.printPID();
 
         return true;
@@ -51,7 +51,7 @@ public class Scheduler {
         nextProcessIndex = (nextProcessIndex + 1) % queueLength;
         numberOfWaitingProcess--;
 
-        System.out.println("\nAction status: SUCCESSFULL\nProcess executed.");
+        System.out.println("\nAction status: SUCCESSFUL\nProcess executed.");
         executedProcess.printPID();
 
         return executedProcess;
