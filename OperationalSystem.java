@@ -1,59 +1,53 @@
-import java.util.Vector;
+import java.util.Scanner;
 
 public class OperationalSystem {
-    private int queueLength;
-    private Vector<Process> processQueue;
-    private int numberOfWaitingProcess;
-    private int nextProcessIndex;
+    private Scanner scanner;
+    private Scheduler scheduler;
 
-    public OperationalSystem(int queueLength) {
-        this.queueLength = queueLength;
-        processQueue = new Vector<Process>(queueLength);
-        numberOfWaitingProcess = 0;
-        nextProcessIndex = 0;
+    public OperationalSystem(Scheduler scheduler) {
+        scanner = new Scanner(System.in);
+        this.scheduler = scheduler;
     }
 
-    public boolean queueIsEmpty() {
-        return numberOfWaitingProcess == 0;
-    }
+    public void run() {
+        int option = 0;
 
-    public boolean queueIsFull() {
-        return numberOfWaitingProcess == queueLength;
-    }
+        System.out.println("Welcome to BSI-OS\nPlease, choice an option");
 
-    public boolean addProcess() {
-        int endOfQueue = (numberOfWaitingProcess + nextProcessIndex) % queueLength;
+        while (true) {
+            System.out.println("\n(1) Add process\n(2) Execute process\n(3) Turn off\n\nOption:");
 
-        if (queueIsFull()) {
-            System.out.println("\nInvalid action: process queue is full");
+            try {
+                option = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException ignored) {
+                System.out.println("\nError: invalid input\nTry again");
 
-            return false;
+                continue;
+            }
+
+            switch (option) {
+                case 1:
+                    scheduler.addProcess(new Process());
+                    break;
+                case 2:
+                    scheduler.executeProcess();
+                    break;
+
+                case 3:
+                    System.out.println("\nSee you soon.");
+                    return;
+
+                default:
+                    System.out.println("\nError: invalid option\nTry again");
+                    break;
+            }
         }
-
-        processQueue.add(endOfQueue, new Process());
-        numberOfWaitingProcess++;
-
-        return true;
-    }
-
-    public Process executeProcess() {
-        Process executedProcess;
-
-        if (queueIsEmpty()) {
-            System.out.println("\nOops! The scheduler didn't find any processes in the queue");
-
-            return null;
-        }
-
-        executedProcess = processQueue.get(nextProcessIndex);
-        
-        numberOfWaitingProcess--;
-        nextProcessIndex = (nextProcessIndex + 1) % queueLength;
-
-        return executedProcess;
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        Scheduler scheduler = new Scheduler(5);
+        OperationalSystem operationalSystem = new OperationalSystem(scheduler);
+
+        operationalSystem.run();
     }
 }
